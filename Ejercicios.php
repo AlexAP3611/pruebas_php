@@ -4,13 +4,14 @@
 Enunciado: Dado un string y un numero N cuenta cuantas palabras tienen mas de N caracteres. Usa explode, strlen y bucles
 */
 
-function countLongWords(string $texto, int $n): int{
+function countLongWords(string $texto, int $n): int
+{
     $palabrasCumplen = 0;
     $palabras = explode(" ", $texto);
     $tamanhoArray = count($palabras);
 
-    for($i = 0; $i < $tamanhoArray; $i++){
-        if(strlen($palabras[$i]) > $n){
+    for ($i = 0; $i < $tamanhoArray; $i++) {
+        if (strlen($palabras[$i]) > $n) {
             $palabrasCumplen++;
         }
     }
@@ -23,10 +24,11 @@ function countLongWords(string $texto, int $n): int{
 /*
 Dado un numero de tarjeta "12345678" enmascara todo menos los ultimos 4 digitos (************5678). Usa substr_replace, str_repeat
 */
-function hideNumbers(string $numeros){
+function hideNumbers(string $numeros)
+{
     $longitud = strlen($numeros);
     $mask = str_repeat("*", $longitud);
-    $resultado = substr_replace($numeros, $mask, 0, -4);  
+    $resultado = substr_replace($numeros, $mask, 0, -4);
     return $resultado;
 }
 
@@ -37,8 +39,9 @@ Declara constantes MIN_EDAD = 18 y MAX_EDAD = 65, crea una funcion que verifique
 */
 const MIN_EDAD = 18;
 const MAX_EDAD = 65;
-function ageCheck(int $age) : bool{
-return $age >= MIN_EDAD && $age >= MAX_EDAD;
+function ageCheck(int $age): bool
+{
+    return $age >= MIN_EDAD && $age >= MAX_EDAD;
 }
 
 //var_dump(ageCheck(66));
@@ -49,8 +52,9 @@ return $age >= MIN_EDAD && $age >= MAX_EDAD;
 /*
 Dado un numero de mes (1-12) devuelve el trimestre al que pertenece usando switch o match
 */
-function checkMonth(int $month) : string{
-    switch ($month){
+function checkMonth(int $month): string
+{
+    switch ($month) {
         case 1:
         case 2:
         case 3:
@@ -253,7 +257,7 @@ $productos = [
         $filtrados
     ); */
 
-    /*     $output = [];
+/*     $output = [];
     foreach($array as $name => $priceProduct){
         if($priceProduct > $priceLimit){
             array_push($output, $name);
@@ -280,7 +284,7 @@ print_r(numberWords([
     "PHP es divertido",
     "La programacion funcional con map filter reduce"
 ]));
- */
+*/
 
 /*
 Dado una lista de estudiantes con sus notas, calcula el promedio de todas las notas, usando array_map y array_reduce
@@ -302,7 +306,7 @@ function calculateAverage(array $notes): float{
 };
 
 print_r(calculateAverage($alumnos));
- */
+*/
 
 /*
 Dado un array de strings, devuelve la longitud total de las palabras que tienen mas de 3 caracteres
@@ -317,7 +321,7 @@ function longWordsLenght(array $array): int{
     );
 };
 echo longWordsLenght(["sol", "estrella", "luz", "universo"]);
- */
+*/
 
 /*
 Dado un array de frases, devolver un array con cada frase invertida palabra por palabra
@@ -336,7 +340,7 @@ print_r(reverseArrayWords([
     "php es genial",
     "programacion funcional"
 ]));
- */
+*/
 
 /*
 Dado un array de numeros, devuelve el producto de los impares
@@ -353,11 +357,13 @@ function returnOdds(array $array):array{
 };
 
 print_r(returnOdds([1,2,3,4,5,6,7]));
- */
+*/
 
 /*
 Dado un array de cadenas, devuelve un array asociativo donde la clave es la palabra y el valor de su longitud
 */
+
+/* 
 function mapaLongitudes(array $array): array {
     $output = [];
     foreach ($array as $valor) {
@@ -366,9 +372,120 @@ function mapaLongitudes(array $array): array {
     return $output;
 }
 print_r(mapaLongitudes(["php", "programacion", "array", "reduce"]));
+*/
 
 /*
 Dada una lista de persona con nombre y edad, devuelve la edad promedio de los mayores de edad
 */
 
-?>
+/*
+Dado un array de palabras, devuelve la mas larga
+*/
+
+/* 
+function longestWord(array $array):string{
+    $longestWord = "";
+    foreach($array as $word){
+        if(strlen($word) > strlen($longestWord)){
+            $longestWord = $word;
+        }
+    }
+return $longestWord;
+}
+
+echo longestWord(["sol", "estrellas", "galaxia", "universo"]);
+ */
+
+/*
+Dado un array de palabras, devuelve un array con las palabras ordenadas por longitud de menor a mayor
+Usando usort con funcion anonima + array_values
+*/
+function orderWords(array $array): array
+{
+    /*     usort(
+        $array, 
+        function($a, $b) {
+            return match(true){
+                strlen($a) < strlen($b) => -1,
+                strlen($a) > strlen($b) => 1,
+                default => 0
+            };
+        });
+ */
+
+    usort(
+        $array,
+        fn($a, $b) => strlen($a) <=> strlen($b)
+    );
+
+
+    return $array;
+};
+
+
+/*
+print_r(orderWords(["php", "programacion", "map", "filter", "reduce"]));
+*/
+
+/*
+Dado un array de numeros, devuelve un array de los cuadrados de los numeros positivos y descarta los negativos
+*/
+function checkSquarePositives(array $array): array
+{
+    $positivos = [];
+    foreach ($array as $value) {
+        if ($value >= 0) {
+            array_push($positivos, $value * $value);
+        }
+    }
+    return $positivos;
+}
+
+print_r(checkSquarePositives([-3, -1, 0, 2, 4]));
+
+
+/*
+Dado un array de frases, devuelve la suma total de caracteres ignorando espacios
+*/
+function returnCharacters(array $array): int
+{
+    /*     $sinEspacios = array_map(
+        fn($f) => str_replace(" ", "", $f),
+        $array
+    );
+    return array_reduce(
+        $sinEspacios,
+        fn($acc,$f) => $acc + strlen($f)
+    );
+ */
+    return array_sum(array_map(
+        fn($f) => strlen(str_replace(" ", "", $f)),
+        $array
+    ));
+}
+
+echo returnCharacters(["hola mundo"]);
+
+/*
+Dada una lista de estudiantes con nombre y notas devuelve un array asociativo con el nombre y su 
+nota media
+*/
+$clase = [
+    ["nombre" => "Ana", "notas" => [7, 8, 9]],
+    ["nombre" => "Luis", "notas" => [5, 6, 7]],
+    ["nombre" => "Marta", "notas" => [9, 9, 10]],
+];
+
+function getAverage(array $array): array
+{
+    return array_map(
+        fn($alumno) => array_reduce(
+            $array,
+            fn($notas, $nota) => $notas + $nota,
+            0
+        ),
+        $array
+    );
+}
+
+print_r(getAverage($clase));
