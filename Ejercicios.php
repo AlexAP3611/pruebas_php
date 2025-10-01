@@ -71,6 +71,8 @@ function checkMonth(int $month): string
         case 11:
         case 12:
             return "Trimestre 4";
+        default:
+            return "Valor no valido";
     }
 }
 
@@ -441,8 +443,9 @@ function checkSquarePositives(array $array): array
     return $positivos;
 }
 
+/* 
 print_r(checkSquarePositives([-3, -1, 0, 2, 4]));
-
+ */
 
 /*
 Dado un array de frases, devuelve la suma total de caracteres ignorando espacios
@@ -464,7 +467,9 @@ function returnCharacters(array $array): int
     ));
 }
 
+/* 
 echo returnCharacters(["hola mundo"]);
+ */
 
 /*
 Dada una lista de estudiantes con nombre y notas devuelve un array asociativo con el nombre y su 
@@ -478,14 +483,105 @@ $clase = [
 
 function getAverage(array $array): array
 {
-    return array_map(
-        fn($alumno) => array_reduce(
-            $array,
-            fn($notas, $nota) => $notas + $nota,
-            0
+    return array_column(
+        array_map(
+            fn($alumno) => [
+                "nombre" => $alumno["nombre"],
+                "media"  => array_sum($alumno["notas"]) / count($alumno["notas"])
+            ],
+            $array
         ),
-        $array
+        "media",
+        "nombre"
     );
 }
 
+/* 
 print_r(getAverage($clase));
+ */
+
+/*
+Dado un array de productos con nombre, precio y cantidad, devuelve el valor total de la compra (precio * cantidad de cada producto)
+*/
+$carrito = [
+    ["nombre" => "Camisa", "precio" => 20, "cantidad" => 2 ],
+    ["nombre" => "Pantalón", "precio" => 35, "cantidad" => 1 ],
+    ["nombre" => "Zapatos", "precio" => 50, "cantidad" => 1 ],
+];
+function calcularValorCompra(array $array): int{
+    $output = 0;
+    foreach($array as $item){
+        $precio = $item["precio"];
+        $cantidad = $item["cantidad"];
+        $valor = $precio * $cantidad;
+        $output += $valor;
+    }
+    return $output;
+}
+
+/* 
+print_r(calcularValorCompra($carrito));
+ */
+
+/*
+Dada una lista de palabras devuelve un array asociativo con cada letra inicial y cuantas palabras empiezan por ella
+*/
+function contarPorInicial(array $palabras): array{
+    return array_reduce(
+        $palabras,
+        function($acc, $p) {
+            $inicial = $p[0];
+            //$acc[$inicial] = ($acc[$inicial] ?? 0) + 1; //Forma mas legible y correcta
+            if(isset($acc[$inicial])){
+                $acc[$inicial]++;
+            } else {
+                $acc[$inicial] = 1;
+            }
+            return $acc;
+        },
+        []
+    );
+}
+
+/*
+print_r(contarPorInicial(["perro", "gato", "pajaro", "pez", "gallina"])); 
+*/
+
+/*
+Dada una lista de frases devuelve un array asociativo con cada palabra y cuantas veces aparece en total
+*/
+function contarPorPalabra(array $frases): array{
+    $texto = implode(" ", $frases);
+    $palabras = explode(" ", strtolower($texto));
+    return array_count_values($palabras);
+}
+
+/* 
+print_r(contarPorPalabra([
+    "Hola mundo",
+    "Mundo en PHP",
+    "Hola programacion en mundo"
+]));
+ */
+
+/*
+Dada una lista de pedidos con cliente, producto y total, devuelve un array con el gasto total por cliente
+*/
+$pedidos = [
+    ["cliente" => "Ana", "producto" => "Camisa", "total" => 20],
+    ["cliente" => "Luis", "producto" => "Pantalon", "total" => 35],
+    ["cliente" => "Ana", "producto" => "Zapatos", "total" => 50],
+    ["cliente" => "Marta", "producto" => "Bolso", "total" => 40],
+];
+
+function gastoPorCliente(array $array): array{
+    $output = [];
+    foreach($array as $cliente){
+        $nombre = $cliente["cliente"];
+        $total = $cliente["total"];
+        $output[$nombre] = ($output[$nombre] ?? 0) + $total;
+    }
+    return $output;
+}
+
+print_r(gastoPorCliente($pedidos));
